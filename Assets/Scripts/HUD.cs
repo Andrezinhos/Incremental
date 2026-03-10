@@ -24,6 +24,12 @@ public class HUD : MonoBehaviour
     private void Start()
     {
         ogTextMultiplier = multiplierDescText.text;
+
+        Invoke("HUDUpdate", 0.1f);
+    }
+
+    public void HUDUpdate()
+    {
         UpdateMoney();
         UpdateMultiplier();
     }

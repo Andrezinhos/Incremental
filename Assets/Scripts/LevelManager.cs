@@ -22,10 +22,14 @@ public class LevelManager : MonoBehaviour
     public float passivePrice;
     public float adPassive;
 
+    float autoSaveTime = 5f;
+
     public static event System.Action OnMoneyChange;
 
     private void Start()
     {
+        SaveManager.Load();
+        StartCoroutine(AutoSave());
         StartCoroutine(PassiveGain());
     }
     public void AddMoney(float value)
@@ -64,11 +68,8 @@ public class LevelManager : MonoBehaviour
 
         qntMultiplier++;
         GameDirectory.instance.HUD.UpdateMultiplier();
-    }
 
-    public void BuyGain()
-    {
-
+        SaveManager.Save();
     }
 
     public IEnumerator PassiveGain()
@@ -78,6 +79,15 @@ public class LevelManager : MonoBehaviour
             yield return new WaitForSeconds(1);
             float value = qntPassives * passiveValue;
             AddMoney(value);
+        }
+    }
+
+    public IEnumerator AutoSave()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(autoSaveTime);
+            SaveManager.Save();
         }
     }
 }
